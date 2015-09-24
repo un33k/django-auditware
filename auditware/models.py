@@ -15,7 +15,7 @@ class UserAudit(models.Model):
     audit_key = models.CharField(max_length=255, db_index=True, unique=True)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
     referrer = models.CharField(max_length=255)
-    user_agent = models.TextField(blank=True)
+    user_agent = models.CharField(max_length=255)
     last_page = models.CharField(max_length=255)
     pages_viwed = models.PositiveIntegerField(default=0)
     force_logout = models.BooleanField(default=False)

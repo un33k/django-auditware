@@ -1,4 +1,4 @@
-import pprint
+from django.db import models
 from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
@@ -8,6 +8,10 @@ from .models import UserAudit
 
 
 class UserAuditAdmin(admin.ModelAdmin):
+
+    formfield_overrides = {
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 160})},
+    }
 
     list_display = [
         'id',

@@ -39,7 +39,7 @@ def force_logout(user, request=None):
     """
     uaa_sessions = get_sessions_for_user(user=user)
     for uaa in uaa_sessions:
-        if request and uaa.audit_key == request.session.get(defs.ACTIVITYWARE_AUDIT_KEY, ''):
+        if request and uaa.audit_key == request.session.get(defs.AUDITWARE_SESSION_KEY, ''):
             uaa.force_logout = False
         else:
             uaa.force_logout = True

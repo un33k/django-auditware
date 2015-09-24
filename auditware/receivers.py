@@ -12,6 +12,13 @@ from . import defaults as defs
 log = logging.getLogger('auditware.listeners')
 
 
+def truncate_to_fit(text, len):
+    """
+    Truncate text to specified length.
+    """
+    return text[:len]
+
+
 def user_audit_create(sender, user, request, **kwargs):
     """ Create a user activity audit when user is logged in """
 
@@ -22,15 +29,15 @@ def user_audit_create(sender, user, request, **kwargs):
         data = {
             'user': request.user,
             'audit_key': audit_key,
-            'user_agent': request.META.get('HTTP_USER_AGENT', 'Unknown'),
+            'user_agent': truncate_to_fit(request.META.get('HTTP_USER_AGENT', 'Unknown'), 255),
             'ip_address': get_ip(request),
-            'referrer': request.META.get('HTTP_REFERER', 'Unknown'),
-            'last_page': request.path or '/',
+            'referrer': truncate_to_fit(request.META.get('HTTP_REFERER', 'Unknown'), 255),
+            'last_page': truncate_to_fit(request.path or '/', 255),
         }
         uaa = UserAudit(**data)
     log.info(_('User {0} logged in'.format(request.user.username)))
     uaa.save()
-    request.session[defs.ACTIVITYWARE_AUDIT_KEY] = audit_key
+    request.session[defs.AUDITWARE_SESSION_KEY] = audit_key
     request.session.modified = True
     util.cleanup_user_audits(request.user)
 
@@ -39,7 +46,7 @@ def user_audit_delete(sender, user, request, **kwargs):
     """ Delete a user activity audit when user is logged out """
 
     try:
-        UserAudit.objects.get(audit_key=request.session[defs.ACTIVITYWARE_AUDIT_KEY]).delete()
+        UserAudit.objects.get(audit_key=request.session[defs.AUDITWARE_SESSION_KEY]).delete()
     except:
         pass
     log.info(_('User {0} logged out'.format(request.user.username)))
