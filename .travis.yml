@@ -19,11 +19,10 @@ install:
   - pip install coveralls
 
 before_script:
-script: coverage run --source=activityware manage.py test
+  - "pep8 --exclude=migrations --ignore=E501,E225,E128,E125 ."
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pyflakes -x W auditware; fi
 
 script: coverage run --source=auditware manage.py test
->>>>>>> master
 
 after_success:
   coveralls
