@@ -1,0 +1,30 @@
+language: python
+
+python:
+  - "3.4"
+  - "3.3"
+  - "2.7"
+  - "2.6"
+  - pypy
+
+env:
+  - DJANGO="django==1.8.4"
+
+install:
+  - pip install $DJANGO
+  - pip install -r requirements.txt
+  - pip install -e .
+  - pip install pep8
+  - pip install https://github.com/un33k/pyflakes/tarball/master
+  - pip install coveralls
+
+before_script:
+script: coverage run --source=activityware manage.py test
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pyflakes -x W auditware; fi
+
+script: coverage run --source=auditware manage.py test
+>>>>>>> master
+
+after_success:
+  coveralls
+

@@ -1,0 +1,4 @@
+Django>=1.8
+django-ipware>=1.1.1
+
+
