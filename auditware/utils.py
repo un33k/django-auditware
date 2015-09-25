@@ -9,6 +9,7 @@ from . import defaults as defs
 
 
 def get_audit_key(key):
+    key = key or defs.AUDITWARE_SESSION_EXPIRED
     return hashlib.md5(key.encode('utf-8')).hexdigest()
 
 
