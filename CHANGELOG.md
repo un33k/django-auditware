@@ -1,3 +1,10 @@
+## 0.0.3
+
+Enhancement:
+
+  - Added initial migrations
+
+
 ## 0.0.2
 
 Enhancement:
