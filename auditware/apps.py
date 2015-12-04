@@ -2,8 +2,6 @@ from django.apps import apps
 from django.apps import AppConfig as DjangoAppConfig
 from django.utils.translation import ugettext_lazy as _
 
-from .receivers import latch_to_signals
-
 
 class AppConfig(DjangoAppConfig):
     """
@@ -16,4 +14,5 @@ class AppConfig(DjangoAppConfig):
         """
         App is imported and ready, so bootstrap it.
         """
+        from .receivers import latch_to_signals
         latch_to_signals()
