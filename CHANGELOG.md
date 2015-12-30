@@ -1,3 +1,10 @@
+## 0.0.4
+
+Enhancement:
+
+  - Added 1.9 support to travis
+
+
 ## 0.0.3
 
 Enhancement:
