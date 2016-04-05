@@ -1,3 +1,11 @@
+## 0.0.5
+
+Enhancement:
+
+  - User email in logs instead of username
+  - Use `user` passed-in by signals instead of `request.user`
+
+
 ## 0.0.4
 
 Enhancement:

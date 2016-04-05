@@ -24,4 +24,4 @@ class UserAudit(models.Model):
         unique_together = (("user", "audit_key"),)
 
     def __unicode__(self):
-        return u"{} ({})".format(self.user.username, self.ip_address)
+        return u"{} ({})".format(self.user.email, self.ip_address)

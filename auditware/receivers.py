@@ -1,4 +1,5 @@
 import logging
+
 from django.contrib.auth import signals as django_signals
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
@@ -27,7 +28,7 @@ def user_audit_create(sender, user, request, **kwargs):
         uaa = UserAudit.objects.get(audit_key=audit_key)
     except UserAudit.DoesNotExist:
         data = {
-            'user': request.user,
+            'user': user,
             'audit_key': audit_key,
             'user_agent': truncate_to_fit(request.META.get('HTTP_USER_AGENT', 'Unknown'), 255),
             'ip_address': get_ip(request),
@@ -35,11 +36,11 @@ def user_audit_create(sender, user, request, **kwargs):
             'last_page': truncate_to_fit(request.path or '/', 255),
         }
         uaa = UserAudit(**data)
-    log.info(_('User {0} logged in'.format(request.user.username)))
+    log.info(_('User {0} logged in'.format(user.email)))
     uaa.save()
     request.session[defs.AUDITWARE_SESSION_KEY] = audit_key
     request.session.modified = True
-    util.cleanup_user_audits(request.user)
+    util.cleanup_user_audits(user)
 
 
 def user_audit_delete(sender, user, request, **kwargs):
@@ -49,7 +50,7 @@ def user_audit_delete(sender, user, request, **kwargs):
         UserAudit.objects.get(audit_key=request.session[defs.AUDITWARE_SESSION_KEY]).delete()
     except:
         pass
-    log.info(_('User {0} logged out'.format(request.user.username)))
+    log.info(_('User {0} logged out'.format(user.email)))
 
 
 def latch_to_signals():
